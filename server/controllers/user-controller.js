@@ -1,6 +1,7 @@
 const { User } = require('../models');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config()
 
 module.exports = {
   
@@ -46,7 +47,7 @@ module.exports = {
     const token = jwt.sign({
       email: user.email,
       id: user._id
-    }, "7etfetyg7w6d2ye2h2d26e")
+    }, process.env.JWT_SECRET)
 
     res.header("auth-token", token).json({ error: null, data: { user, token }})
   },
@@ -59,7 +60,7 @@ module.exports = {
       return res.status(401).json({msg: "authorized"})
     }
 
-    const isVerified = jwt.verify(token, "7etfetyg7w6d2ye2h2d26e")
+    const isVerified = jwt.verify(token, process.env.JWT_SECRET)
 
     if( !isVerified ){
       return res.status(401).json({msg: "authorized"})
